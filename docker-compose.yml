@@ -15,9 +15,10 @@ services:
     hostname: puppet
     build:
       context: puppet-master
-    privileged: true
     volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - ./volumes/puppet-master/modules:/etc/puppetlabs/code/environments/production/modules:rw
+      - ./volumes/puppet-master/hieradata:/etc/puppetlabs/code/environments/production/nodes:ro
+      - ./volumes/puppet-master/manifests:/etc/puppetlabs/code/environments/production/manifests:ro
   remote_host:
     container_name: remote-host
     image: devops-remote-host
@@ -29,6 +30,12 @@ services:
       - "8443:443"
     depends_on:
       - puppet
+  remote_host2:
+    container_name: remote-host-2
+    image: devops-remote-host
+    hostname: remote-host-2
+    depends_on:
+      - puppet
     # command: puppet agent -t && "while true; do sleep 30; done;"
   # git:
     # container_name: git-server
@@ -37,7 +44,7 @@ services:
       # - "443:443"
       # - "80:80"
     # volumes:
-      # - $PWD/gitlab/config:/etc/gitlab
-      # - $PWD/gitlab/logs:/var/log/gitlab
-      # - $PWD/gitlab/data:/var/opt/gitlab"
+      # - ./volumes/gitlab/config:/etc/gitlab
+      # - ./volumes/gitlab/logs:/var/log/gitlab
+      # - ./volumes/gitlab/data:/var/opt/gitlab"
     # image: gitlab/gitlab-ce

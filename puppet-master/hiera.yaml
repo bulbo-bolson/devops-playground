@@ -1,0 +1,12 @@
+---
+:backends:
+  - yaml
+:yaml:
+  # :datadir: /etc/puppet/environments/%{::environment}/hieradata"
+  :datadir: /var/lib/hiera
+:hierarchy:
+  - "%{::clientcert}"
+  - "nodes/%{::trusted.certname}"
+  - "%{::environment}"
+  - "%{::osfamily}"
+  - "common"

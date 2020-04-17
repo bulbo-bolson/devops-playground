@@ -8,9 +8,11 @@ RUN yum -y install openssh-server
 RUN /usr/sbin/sshd-keygen > /dev/null 2>&1 
 
 # install puppet 5 server and agent
-RUN rpm -ivh https://yum.puppetlabs.com/el/7/products/x86_64/puppetlabs-release-7-11.noarch.rpm && \
-    yum -y install puppet-server puppet
-RUN echo JAVA_ARGS="${PUPPETMASTER_JAVA_ARGS:--Xms512m -Xmx512m}" >> /etc/sysconfig/puppetserver
+RUN rpm -Uvh https://yum.puppet.com/puppet5-release-el-7.noarch.rpm && \
+    yum -y install puppetserver puppet
 
-CMD ["/usr/bin/puppet", "master", "--no-daemonize"]
+RUN echo "JAVA_ARGS=${PUPPETMASTER_JAVA_ARGS:-\"-Xms512m -Xmx512m\"}" >> /etc/sysconfig/puppetserver
+COPY ./autosign.conf /etc/puppetlabs/puppet/autosign.conf
+
+CMD /opt/puppetlabs/bin/puppetserver foreground
 
