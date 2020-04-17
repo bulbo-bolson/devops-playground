@@ -27,6 +27,9 @@ services:
     ports:
       - "8888:80"
       - "8443:443"
+    depends_on:
+      - puppet
+    # command: puppet agent -t && "while true; do sleep 30; done;"
   # git:
     # container_name: git-server
     # hostname: gitlab.example.com

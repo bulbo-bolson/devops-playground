@@ -11,6 +11,5 @@ RUN /usr/sbin/sshd-keygen > /dev/null 2>&1
 RUN rpm -ivh https://yum.puppetlabs.com/el/7/products/x86_64/puppetlabs-release-7-11.noarch.rpm && \
     yum -y install puppet
 
-CMD ["/usr/sbin/init"]
-
+CMD tail -f /dev/null
 
