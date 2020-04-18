@@ -2,41 +2,40 @@ version: '3'
 services:
   # jenkins:
     # container_name: jenkins
-    # image: devops-jenkins-ansible
+    # image: devops-jenkins
     # build:
-      # context: jenkins-ansible
+      # context: jenkins
     # ports:
       # - "8080:8080"
     # volumes:
-      # - $PWD/jenkins_home:/var/jenkins_home
+      # - ./volumes/jenkins/jenkins_home:/var/jenkins_home
   puppet:
     container_name: puppet
     image: devops-puppet-master
     hostname: puppet
     build:
-      context: puppet-master
+      context: docker/puppet-master
     volumes:
       - ./volumes/puppet-master/modules:/etc/puppetlabs/code/environments/production/modules:rw
       - ./volumes/puppet-master/hieradata:/etc/puppetlabs/code/environments/production/nodes:ro
       - ./volumes/puppet-master/manifests:/etc/puppetlabs/code/environments/production/manifests:ro
-  remote_host:
-    container_name: remote-host
-    image: devops-remote-host
-    hostname: remote-host
+  server_1:
+    container_name: server-1
+    image: devops-server
+    hostname: server-1
     build:
-      context: remote-host
+      context: docker/server
     ports:
       - "8888:80"
       - "8443:443"
     depends_on:
       - puppet
-  remote_host2:
-    container_name: remote-host-2
-    image: devops-remote-host
-    hostname: remote-host-2
+  server_2:
+    container_name: server-2
+    image: devops-server
+    hostname: server-2
     depends_on:
       - puppet
-    # command: puppet agent -t && "while true; do sleep 30; done;"
   # git:
     # container_name: git-server
     # hostname: gitlab.example.com
